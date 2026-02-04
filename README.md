@@ -135,6 +135,21 @@ API routes
 - `PUT|PATCH /api/<Model>/<id>` update row
 - `DELETE /api/<Model>/<id>` delete row
 
+## VibeWeb Design Customization
+- Admin UI theme lives in `vibeweb/server.py`:
+- `TAILWIND_HEAD` controls external CSS (Tailwind CDN + Google Fonts) and color/font tokens.
+- `THEME` is a single dict of Tailwind class strings used across the admin UI.
+- Gallery/home page design lives in `examples/index.html` (and `docs/index.html` for GitHub Pages).
+- To add extra CSS, add a `<style>` or `<link>` in `TAILWIND_HEAD` and/or `examples/index.html`.
+
+## VibeLang API Call Examples
+- See `examples/api-call/README.md` for the full list.
+- Example run:
+```bash
+python3 -m vibelang run examples/api-call/get_json.vbl.json
+```
+- Other files include `post_json.vbl.json`, `bearer_auth.vbl.json`, and `timeout_retry.vbl.json`.
+
 Structured statements (for `body.block` or `run.block`)
 - `{"set": {"name": "x", "value": <expr>}}`
 - `{"if": {"cond": <expr>, "then": [..], "else": [..]}}`

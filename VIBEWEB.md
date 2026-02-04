@@ -85,6 +85,37 @@ Query params (list)
 - `sort`: `id` or field name
 - `dir`: `asc` or `desc`
 
+## API Call Examples
+List rows:
+```bash
+curl -s http://127.0.0.1:8000/api/Todo
+```
+
+Create row:
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/Todo \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Ship demo","done":false}'
+```
+
+Update row:
+```bash
+curl -s -X PATCH http://127.0.0.1:8000/api/Todo/1 \
+  -H "Content-Type: application/json" \
+  -d '{"done":true}'
+```
+
+Delete row:
+```bash
+curl -s -X DELETE http://127.0.0.1:8000/api/Todo/1
+```
+
+## Design Customization
+- Admin UI uses Tailwind CDN classes defined in `vibeweb/server.py`.
+- Edit `TAILWIND_HEAD` to change fonts, colors, or add external CSS.
+- Edit `THEME` to change the class strings for layout, buttons, tables, and cards.
+- Gallery homepage design is in `examples/index.html` (and `docs/index.html` for GitHub Pages).
+
 ## Notes
 - Uses SQLite via stdlib `sqlite3`.
 - HTML UI is intentionally minimal and generated on the fly.
