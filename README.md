@@ -1,9 +1,16 @@
-# Purpose / When You Need This
+# VibePy
+
+## Contents
+- Purpose / When You Need This
+- VibeLang (LLM-First Python-Compatible Language)
+- VibeWeb (AI-Friendly Full-Stack Framework)
+
+## Purpose / When You Need This
 - When you want the full Python ecosystem (libraries, C-extensions) but prefer AI-friendly JSON specs.
 - When you need step-level control, validation, and reproducible execution reports.
 - When you want to generate and operate web apps from a single DB/backend/frontend spec (VibeWeb).
 
-# VibeLang (LLM-First Python-Compatible Language)
+## VibeLang (LLM-First Python-Compatible Language)
 
 VibeLang is a JSON-first, AI-only authoring language that compiles to Python AST and runs on CPython for maximum compatibility.
 
@@ -13,7 +20,7 @@ Key points
 - Step-level instrumentation with retries, timeouts, and guards
 - Execution report output
 
-## VibeLang Syntax (JSON IR)
+### VibeLang Syntax (JSON IR)
 Minimal program:
 ```json
 {
@@ -66,7 +73,7 @@ Imports
 - `{ "import": "numpy", "as": "np" }`
 - `{ "from": "math", "import": ["sqrt", "ceil"] }`
 
-## `.vbl` Syntax (S-Expression)
+### `.vbl` Syntax (S-Expression)
 Example (`examples/echo.vbl`):
 ```
 (meta (name "Echo Pipeline") (version "0.1"))
@@ -84,7 +91,7 @@ Example (`examples/echo.vbl`):
 (run (upper (normalize raw)))
 ```
 
-## VibeLang API Call Examples
+### VibeLang API Call Examples
 - See `examples/api-call/README.md` for the full list.
 - Example run:
 ```bash
@@ -92,13 +99,13 @@ python3 -m vibelang run examples/api-call/get_json.vbl.json
 ```
 - Other files include `post_json.vbl.json`, `bearer_auth.vbl.json`, and `timeout_retry.vbl.json`.
 
-## Standard Library Bridge (`vibelang.std`)
+### Standard Library Bridge (`vibelang.std`)
 - `vbl.log(message, **fields)` writes to the execution report
 - `vbl.validate_jsonschema(data, schema)` (requires `jsonschema`)
 - `vbl.validate_pydantic(model, data)` (requires `pydantic`)
 - `vbl.parallel({...})` executes callables in a thread pool
 
-## VibeLang CLI
+### VibeLang CLI
 Validate a program:
 ```bash
 python3 -m vibelang validate examples/echo.vbl
@@ -126,7 +133,7 @@ python3 -m vibelang parse examples/echo.vbl
 
 ---
 
-# VibeWeb (AI-Friendly Full-Stack Framework)
+## VibeWeb (AI-Friendly Full-Stack Framework)
 
 VibeWeb is a minimal, AI-first web framework that unifies DB, backend, and frontend using a single JSON spec.
 
@@ -136,7 +143,7 @@ Key points
 - Minimal HTML UI pages
 - One spec drives DB + API + UI
 
-## VibeWeb Spec (JSON)
+### VibeWeb Spec (JSON)
 Example:
 ```json
 {
@@ -186,14 +193,14 @@ API routes
 - `PUT|PATCH /api/<Model>/<id>` update row
 - `DELETE /api/<Model>/<id>` delete row
 
-## VibeWeb Design Customization
+### VibeWeb Design Customization
 - Admin UI theme lives in `vibeweb/server.py`.
 - `TAILWIND_HEAD` controls external CSS (Tailwind CDN + Google Fonts) and color/font tokens.
 - `THEME` is a single dict of Tailwind class strings used across the admin UI.
 - Gallery/home page design lives in `examples/index.html` (and `docs/index.html` for GitHub Pages).
 - To add extra CSS, add a `<style>` or `<link>` in `TAILWIND_HEAD` and/or `examples/index.html`.
 
-## VibeWeb CLI
+### VibeWeb CLI
 Quick start
 ```bash
 python3 -m vibeweb validate examples/todo/todo.vweb.json
