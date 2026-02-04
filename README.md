@@ -1,11 +1,11 @@
 # Purpose / When You Need This
-- When you want to keep the full Python ecosystem (libraries, C-extensions) but author in AI-friendly JSON specs.
+- When you want the full Python ecosystem (libraries, C-extensions) but prefer AI-friendly JSON specs.
 - When you need step-level control, validation, and reproducible execution reports.
 - When you want to generate and operate web apps from a single DB/backend/frontend spec (VibeWeb).
 
 # VibeLang (LLM-First Python-Compatible Language)
 
-VibeLang is a JSON-first, AI-only authoring language that compiles to Python AST and runs on CPython for maximum package compatibility.
+VibeLang is a JSON-first, AI-only authoring language that compiles to Python AST and runs on CPython for maximum compatibility.
 
 Key points
 - CPython execution (stdlib + Python packages)
@@ -30,7 +30,7 @@ Minimal program:
 }
 ```
 
-IR Format (v0.1)
+IR format (v0.1)
 - `meta`: object with metadata
 - `imports`: list of Python imports
 - `inputs`: object of input values
@@ -84,6 +84,20 @@ Example (`examples/echo.vbl`):
 (run (upper (normalize raw)))
 ```
 
+## VibeLang API Call Examples
+- See `examples/api-call/README.md` for the full list.
+- Example run:
+```bash
+python3 -m vibelang run examples/api-call/get_json.vbl.json
+```
+- Other files include `post_json.vbl.json`, `bearer_auth.vbl.json`, and `timeout_retry.vbl.json`.
+
+## Standard Library Bridge (`vibelang.std`)
+- `vbl.log(message, **fields)` writes to the execution report
+- `vbl.validate_jsonschema(data, schema)` (requires `jsonschema`)
+- `vbl.validate_pydantic(model, data)` (requires `pydantic`)
+- `vbl.parallel({...})` executes callables in a thread pool
+
 ## VibeLang CLI
 Validate a program:
 ```bash
@@ -109,20 +123,6 @@ Parse `.vbl` to JSON IR:
 ```bash
 python3 -m vibelang parse examples/echo.vbl
 ```
-
-## VibeLang API Call Examples
-- See `examples/api-call/README.md` for the full list.
-- Example run:
-```bash
-python3 -m vibelang run examples/api-call/get_json.vbl.json
-```
-- Other files include `post_json.vbl.json`, `bearer_auth.vbl.json`, and `timeout_retry.vbl.json`.
-
-## Standard Library Bridge (`vibelang.std`)
-- `vbl.log(message, **fields)` writes to the execution report
-- `vbl.validate_jsonschema(data, schema)` (requires `jsonschema`)
-- `vbl.validate_pydantic(model, data)` (requires `pydantic`)
-- `vbl.parallel({...})` executes callables in a thread pool
 
 ---
 
