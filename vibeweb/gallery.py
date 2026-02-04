@@ -23,6 +23,7 @@ CSP = (
     "font-src https://fonts.gstatic.com; "
     "img-src 'self' data:; "
     "connect-src 'self' https://cdn.tailwindcss.com; "
+    "frame-src 'self' http://127.0.0.1:* http://localhost:*; "
     "frame-ancestors 'none'"
 )
 
@@ -234,8 +235,13 @@ class PreviewManager:
         self._stop()
         preview_dir = self.root_dir / ".preview"
         preview_dir.mkdir(parents=True, exist_ok=True)
+        preview_spec = json.loads(json.dumps(spec))
+        if preview_spec.get("ui", {}).get("admin_auth") and os.environ.get("VIBEWEB_PREVIEW_KEEP_AUTH") != "1":
+            preview_spec["ui"].pop("admin_auth", None)
+        if "db" in preview_spec and isinstance(preview_spec["db"], dict):
+            preview_spec["db"]["path"] = str(preview_dir / "preview.db")
         self.spec_path = preview_dir / "app.vweb.json"
-        self.spec_path.write_text(json.dumps(spec, ensure_ascii=False, indent=2), encoding="utf-8")
+        self.spec_path.write_text(json.dumps(preview_spec, ensure_ascii=False, indent=2), encoding="utf-8")
 
         base_port = int(os.environ.get("VIBEWEB_PREVIEW_PORT", "8010"))
         self.port = _find_open_port(base_port)
