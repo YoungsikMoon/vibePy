@@ -1,26 +1,36 @@
 # VibePy
 
+VibePy is a JSON-first, AI-friendly stack that combines **VibeLang** (a Python-compatible DSL) and **VibeWeb** (a full‑stack JSON spec for DB/API/UI). It runs on CPython and keeps the full Python ecosystem available.
+
 ## Contents
 - Purpose / When You Need This
-- VibeLang (LLM-First Python-Compatible Language)
-- VibeWeb (AI-Friendly Full-Stack Framework)
+- VibeLang Overview
+- VibeLang Syntax (JSON IR)
+- VibeLang `.vbl` Syntax
+- VibeLang API Call Syntax
+- VibeLang CLI
+- VibeWeb Overview
+- VibeWeb Spec (JSON)
+- VibeWeb API
+- VibeWeb Design Syntax
+- VibeWeb CLI
+- Local LLM (GLM-4.7-Flash)
 
 ## Purpose / When You Need This
-- When you want the full Python ecosystem (libraries, C-extensions) but prefer AI-friendly JSON specs.
-- When you need step-level control, validation, and reproducible execution reports.
-- When you want to generate and operate web apps from a single DB/backend/frontend spec (VibeWeb).
+- Keep Python libraries and C-extensions, while authoring in AI-friendly JSON specs.
+- Enforce step-level control, validation, and reproducible execution reports.
+- Generate and operate web apps from a single DB/backend/frontend spec (VibeWeb).
 
-## VibeLang (LLM-First Python-Compatible Language)
-
+## VibeLang Overview
 VibeLang is a JSON-first, AI-only authoring language that compiles to Python AST and runs on CPython for maximum compatibility.
 
-Key points
+Key characteristics
 - CPython execution (stdlib + Python packages)
-- JSON IR and `.vbl` S-expression syntax for deterministic, LLM-friendly generation
+- Deterministic JSON IR and `.vbl` S-expression syntax
 - Step-level instrumentation with retries, timeouts, and guards
 - Execution report output
 
-### VibeLang Syntax (JSON IR)
+## VibeLang Syntax (JSON IR)
 Minimal program:
 ```json
 {
@@ -73,7 +83,7 @@ Imports
 - `{ "import": "numpy", "as": "np" }`
 - `{ "from": "math", "import": ["sqrt", "ceil"] }`
 
-### `.vbl` Syntax (S-Expression)
+## VibeLang `.vbl` Syntax
 Example (`examples/echo.vbl`):
 ```
 (meta (name "Echo Pipeline") (version "0.1"))
@@ -91,15 +101,7 @@ Example (`examples/echo.vbl`):
 (run (upper (normalize raw)))
 ```
 
-### VibeLang API Call Examples
-- See `examples/api-call/README.md` for the full list.
-- Example run:
-```bash
-python3 -m vibelang run examples/api-call/get_json.vbl.json
-```
-- Other files include `post_json.vbl.json`, `bearer_auth.vbl.json`, and `timeout_retry.vbl.json`.
-
-### API Call Syntax (VibeLang)
+## VibeLang API Call Syntax
 Minimal HTTP GET + JSON parse:
 ```json
 {
@@ -120,13 +122,13 @@ Minimal HTTP GET + JSON parse:
 }
 ```
 
-### Standard Library Bridge (`vibelang.std`)
-- `vbl.log(message, **fields)` writes to the execution report
-- `vbl.validate_jsonschema(data, schema)` (requires `jsonschema`)
-- `vbl.validate_pydantic(model, data)` (requires `pydantic`)
-- `vbl.parallel({...})` executes callables in a thread pool
+Additional API examples
+- `examples/api-call/get_json.vbl.json`
+- `examples/api-call/post_json.vbl.json`
+- `examples/api-call/bearer_auth.vbl.json`
+- `examples/api-call/timeout_retry.vbl.json`
 
-### VibeLang CLI
+## VibeLang CLI
 Validate a program:
 ```bash
 python3 -m vibelang validate examples/echo.vbl
@@ -152,19 +154,16 @@ Parse `.vbl` to JSON IR:
 python3 -m vibelang parse examples/echo.vbl
 ```
 
----
-
-## VibeWeb (AI-Friendly Full-Stack Framework)
-
+## VibeWeb Overview
 VibeWeb is a minimal, AI-first web framework that unifies DB, backend, and frontend using a single JSON spec.
 
-Key points
+Key characteristics
 - SQLite-backed data models
 - Auto CRUD JSON API
 - Minimal HTML UI pages
 - One spec drives DB + API + UI
 
-### VibeWeb Spec (JSON)
+## VibeWeb Spec (JSON)
 Example:
 ```json
 {
@@ -207,22 +206,27 @@ Spec overview
 Field types
 - `text`, `int`, `float`, `bool`, `datetime`
 
-API routes
+## VibeWeb API
+Routes
 - `GET /api/<Model>` list rows
 - `POST /api/<Model>` create row (JSON or form)
 - `GET /api/<Model>/<id>` get row
 - `PUT|PATCH /api/<Model>/<id>` update row
 - `DELETE /api/<Model>/<id>` delete row
 
-### VibeWeb Design Customization
-- Admin UI theme lives in `vibeweb/server.py`.
-- `TAILWIND_HEAD` controls external CSS (Tailwind CDN + Google Fonts) and color/font tokens.
-- `THEME` is a single dict of Tailwind class strings used across the admin UI.
-- Gallery/home page design lives in `examples/index.html` (and `docs/index.html` for GitHub Pages).
-- To add extra CSS, add a `<style>` or `<link>` in `TAILWIND_HEAD` and/or `examples/index.html`.
+Query params
+- `q`: substring search across text fields
+- `sort`: `id` or field name
+- `dir`: `asc` or `desc`
 
-### Design Syntax (Admin UI Theme)
-`THEME` keys are the design surface. Update values to change layout/visuals:
+## VibeWeb Design Syntax
+The admin UI is defined by Tailwind class strings in a single theme map.
+
+Design surface (`vibeweb/server.py`)
+- `TAILWIND_HEAD`: external CSS (Tailwind CDN + Google Fonts) and tokens
+- `THEME`: class strings for layout, buttons, tables, and cards
+
+Core `THEME` keys
 - `body`, `grid_overlay`, `shell`, `container`, `topbar`, `brand`, `nav`, `nav_link`
 - `surface`, `header`, `header_title`, `header_subtitle`, `header_tag`
 - `panel`, `panel_title`, `form_grid`, `label`, `input`
@@ -230,7 +234,9 @@ API routes
 - `table_wrap`, `table`, `thead`, `tbody`, `row`, `cell`
 - `grid`, `card`, `card_title`, `badge`, `link`, `link_muted`, `stack`
 
-### VibeWeb CLI
+Gallery design lives in `examples/index.html` (and `docs/index.html` for GitHub Pages).
+
+## VibeWeb CLI
 Quick start
 ```bash
 python3 -m vibeweb validate examples/todo/todo.vweb.json
@@ -242,7 +248,8 @@ Examples homepage (served from root):
 python3 -m vibeweb gallery --root examples --host 127.0.0.1 --port 9000
 ```
 
-Natural language builder (GLM-4.7-Flash local):
+## Local LLM (GLM-4.7-Flash)
+Natural language builder:
 ```bash
 export VIBEWEB_AI_BASE_URL="http://127.0.0.1:8080/v1"
 export VIBEWEB_AI_MODEL="glm-4.7-flash"
@@ -250,7 +257,7 @@ python3 -m vibeweb gallery --root examples --host 127.0.0.1 --port 9000
 # Then open http://127.0.0.1:9000 and use the form to download a ZIP.
 ```
 
-Generate a spec with a local LLM (GLM-4.7-Flash via OpenAI-compatible server):
+Generate a spec with a local LLM:
 ```bash
 python3 -m vibeweb ai --prompt "simple todo app with title and done"
 ```
