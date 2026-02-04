@@ -1,3 +1,8 @@
+# 목적 / 언제 필요한가
+- Python 생태계(라이브러리, C-extension)를 그대로 쓰면서, AI가 수정하기 쉬운 JSON 스펙으로 작업하고 싶을 때
+- 코드 변경을 “step 단위”로 통제·검증하고 재현 가능한 실행 리포트를 얻고 싶을 때
+- 웹 앱을 DB/백/프론트 한 스펙으로 빠르게 생성·운영하고 싶을 때 (VibeWeb)
+
 # VibeLang (LLM-First Python-Compatible Language)
 
 VibeLang is a JSON-first, AI-only authoring language that compiles to Python AST and runs on CPython for maximum package compatibility.
