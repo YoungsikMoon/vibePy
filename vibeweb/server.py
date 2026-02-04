@@ -41,14 +41,14 @@ _BASE_CSP = (
 TAILWIND_HEAD = (
     "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">"
     "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>"
-    "<link href=\"https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap\" rel=\"stylesheet\">"
+    "<link href=\"https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap\" rel=\"stylesheet\">"
     "<script src=\"https://cdn.tailwindcss.com\"></script>"
     "<script>"
     "tailwind.config = {"
     "theme: {"
     "extend: {"
-    "fontFamily: { display: ['Bricolage Grotesque', 'sans-serif'], mono: ['Space Mono', 'monospace'] },"
-    "colors: { brand: { 50: '#f3ffe3', 400: '#b7ff5a', 600: '#7ed957' } }"
+    "fontFamily: { display: ['Urbanist', 'sans-serif'], mono: ['Space Mono', 'monospace'] },"
+    "colors: { brand: { 50: '#fff1ec', 400: '#ff6b4a', 600: '#f04f33' }, mint: { 400: '#1f9d8f' } }"
     "}"
     "}"
     "}"
@@ -56,39 +56,39 @@ TAILWIND_HEAD = (
 )
 
 THEME = {
-    "body": "min-h-screen font-display text-slate-950 bg-gradient-to-br from-stone-50 via-lime-50 to-emerald-100",
-    "grid_overlay": "fixed inset-0 -z-10 opacity-40 "
-    "bg-[linear-gradient(120deg,rgba(15,23,42,0.07)_1px,transparent_1px)] "
-    "[background-size:36px_36px]",
-    "shell": "px-6 py-8 lg:px-10",
+    "body": "min-h-screen font-display text-slate-900 bg-gradient-to-br from-[#f8f3ea] via-[#f1f6ff] to-[#e7fbf3]",
+    "grid_overlay": "fixed inset-0 -z-10 opacity-30 "
+    "bg-[radial-gradient(rgba(15,23,42,0.08)_1px,transparent_1px)] "
+    "[background-size:24px_24px]",
+    "shell": "px-6 py-8 lg:px-12",
     "container": "mx-auto flex max-w-6xl flex-col gap-6",
-    "topbar": "flex items-center justify-between rounded-[26px] border-2 border-slate-900 bg-white px-6 py-4 shadow-[10px_10px_0_rgba(15,23,42,0.15)]",
+    "topbar": "flex items-center justify-between rounded-[24px] border border-slate-900/10 bg-white/80 px-6 py-4 shadow-[0_16px_30px_rgba(15,23,42,0.14)] backdrop-blur",
     "brand": "text-lg font-semibold tracking-wide",
     "nav": "flex items-center gap-2",
-    "nav_link": "rounded-full border border-slate-900 px-3 py-1 text-sm font-medium text-slate-900 transition hover:-translate-y-0.5 hover:bg-brand-400",
-    "surface": "rounded-[30px] border-2 border-slate-900 bg-white p-6 shadow-[14px_14px_0_rgba(15,23,42,0.12)]",
+    "nav_link": "rounded-full border border-slate-900/10 px-3 py-1 text-sm font-medium text-slate-700 transition hover:-translate-y-0.5 hover:bg-brand-400 hover:text-white",
+    "surface": "rounded-[28px] border border-slate-900/10 bg-white/90 p-6 shadow-[0_20px_40px_rgba(15,23,42,0.12)] backdrop-blur",
     "header": "flex flex-wrap items-center justify-between gap-4",
     "header_title": "text-2xl font-semibold",
     "header_subtitle": "text-sm text-slate-600",
-    "header_tag": "rounded-full border border-slate-900 bg-brand-400 px-3 py-1 text-xs font-semibold text-slate-900",
-    "panel": "rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm",
+    "header_tag": "rounded-full border border-brand-400/40 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-600",
+    "panel": "rounded-2xl border border-slate-900/10 bg-white p-5 shadow-[0_12px_24px_rgba(15,23,42,0.08)]",
     "panel_title": "text-lg font-semibold",
     "form_grid": "mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3",
     "label": "flex flex-col gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-500",
-    "input": "rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm focus:border-slate-900 focus:outline-none",
-    "btn_primary": "rounded-xl bg-brand-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-[3px_3px_0_rgba(15,23,42,0.2)]",
-    "btn_dark": "rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-[3px_3px_0_rgba(15,23,42,0.2)]",
-    "btn_outline": "ml-2 rounded-full border-2 border-slate-900 px-3 py-1 text-xs font-semibold text-slate-900",
+    "input": "rounded-xl border border-slate-900/10 bg-white px-3 py-2 text-sm focus:border-brand-400 focus:outline-none",
+    "btn_primary": "rounded-xl bg-brand-400 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_18px_rgba(255,107,74,0.35)]",
+    "btn_dark": "rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_18px_rgba(15,23,42,0.25)]",
+    "btn_outline": "ml-2 rounded-full border border-slate-900/20 px-3 py-1 text-xs font-semibold text-slate-700",
     "table_wrap": "mt-4 overflow-x-auto",
     "table": "min-w-full text-sm",
-    "thead": "bg-lime-50 text-xs uppercase tracking-widest text-slate-600",
+    "thead": "bg-[#fff3ef] text-xs uppercase tracking-widest text-slate-600",
     "tbody": "divide-y divide-slate-100",
-    "row": "hover:bg-lime-50/60",
+    "row": "hover:bg-[#fff7f4]",
     "cell": "px-4 py-3",
     "grid": "grid gap-4 md:grid-cols-2",
-    "card": "rounded-2xl border-2 border-slate-900 bg-white p-5 shadow-[6px_6px_0_rgba(15,23,42,0.12)]",
+    "card": "rounded-2xl border border-slate-900/10 bg-white p-5 shadow-[0_12px_24px_rgba(15,23,42,0.08)]",
     "card_title": "text-lg font-semibold",
-    "badge": "rounded-full border border-slate-900 bg-brand-400 px-3 py-1 text-xs font-semibold text-slate-900",
+    "badge": "rounded-full border border-brand-400/30 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-600",
     "link": "text-slate-900 font-semibold underline decoration-brand-400 decoration-4 underline-offset-4",
     "link_muted": "text-slate-600",
     "stack": "flex flex-col gap-6",
