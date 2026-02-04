@@ -99,6 +99,27 @@ python3 -m vibelang run examples/api-call/get_json.vbl.json
 ```
 - Other files include `post_json.vbl.json`, `bearer_auth.vbl.json`, and `timeout_retry.vbl.json`.
 
+### API Call Syntax (VibeLang)
+Minimal HTTP GET + JSON parse:
+```json
+{
+  "imports": ["urllib.request", "json"],
+  "steps": [
+    {
+      "name": "fetch_json",
+      "params": ["url"],
+      "timeout": 10,
+      "body": [
+        "with urllib.request.urlopen(url, timeout=5) as resp:",
+        "    data = resp.read().decode('utf-8')",
+        "    return json.loads(data)"
+      ]
+    }
+  ],
+  "run": { "call": "fetch_json", "args": [ { "literal": "https://example.com" } ] }
+}
+```
+
 ### Standard Library Bridge (`vibelang.std`)
 - `vbl.log(message, **fields)` writes to the execution report
 - `vbl.validate_jsonschema(data, schema)` (requires `jsonschema`)
@@ -199,6 +220,15 @@ API routes
 - `THEME` is a single dict of Tailwind class strings used across the admin UI.
 - Gallery/home page design lives in `examples/index.html` (and `docs/index.html` for GitHub Pages).
 - To add extra CSS, add a `<style>` or `<link>` in `TAILWIND_HEAD` and/or `examples/index.html`.
+
+### Design Syntax (Admin UI Theme)
+`THEME` keys are the design surface. Update values to change layout/visuals:
+- `body`, `grid_overlay`, `shell`, `container`, `topbar`, `brand`, `nav`, `nav_link`
+- `surface`, `header`, `header_title`, `header_subtitle`, `header_tag`
+- `panel`, `panel_title`, `form_grid`, `label`, `input`
+- `btn_primary`, `btn_dark`, `btn_outline`
+- `table_wrap`, `table`, `thead`, `tbody`, `row`, `cell`
+- `grid`, `card`, `card_title`, `badge`, `link`, `link_muted`, `stack`
 
 ### VibeWeb CLI
 Quick start
