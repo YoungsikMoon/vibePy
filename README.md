@@ -20,6 +20,7 @@ VibePy is a JSON-first, AI-friendly stack that combines **VibeLang** (a Python-c
 - VibeWeb Design Syntax
 - VibeWeb CLI
 - AI Generator (DeepSeek API)
+- Deploy (Render)
 
 ## Purpose / When You Need This
 - Keep Python libraries and C-extensions, while authoring in AI-friendly JSON specs.
@@ -320,3 +321,11 @@ Admin credential overrides (recommended for security):
 export VIBEWEB_ADMIN_USER="admin"
 export VIBEWEB_ADMIN_PASSWORD="change-me"
 ```
+
+## Deploy (Render)
+This repo includes `render.yaml` to deploy the gallery with `/generate`.
+
+Required env vars (set in Render dashboard):
+- `VIBEWEB_AI_API_KEY`
+- Optional: `VIBEWEB_AI_MODEL` (default `deepseek-chat`)
+- Optional: `VIBEWEB_AI_BASE_URL` (default `https://api.deepseek.com/v1`)
