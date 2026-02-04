@@ -275,6 +275,7 @@
     const generateForm = document.getElementById("generate-form");
     const generateBtn = document.getElementById("generate-btn");
     const generateStatus = document.getElementById("generate-status");
+    const generateIdleText = generateStatus.textContent;
 
     function escapeHtml(value) {
       return String(value)
@@ -504,12 +505,12 @@
       const formData = new FormData(generateForm);
       const prompt = String(formData.get("prompt") || "").trim();
       if (!prompt) {
-        generateStatus.textContent = "Please enter a prompt.";
+        generateStatus.textContent = "프롬프트를 입력하세요.";
         return;
       }
       generateBtn.disabled = true;
-      generateBtn.textContent = "Generating...";
-      generateStatus.textContent = "Creating ZIP with DeepSeek...";
+      generateBtn.textContent = "생성중...";
+      generateStatus.textContent = "생성중...";
       try {
         const res = await fetch("/generate", { method: "POST", body: formData });
         if (!res.ok) {
@@ -525,12 +526,15 @@
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
-        generateStatus.textContent = "ZIP generated.";
+        generateStatus.textContent = "완료: ZIP 다운로드됨.";
       } catch (err) {
-        generateStatus.textContent = err.message || "Generation failed.";
+        generateStatus.textContent = `실패: ${err.message || "Generation failed."}`;
       } finally {
         generateBtn.disabled = false;
         generateBtn.textContent = "Generate ZIP";
+        if (generateStatus.textContent === "생성중...") {
+          generateStatus.textContent = generateIdleText;
+        }
       }
     });
   </script>
