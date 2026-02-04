@@ -3,6 +3,7 @@ import os
 import urllib.request
 from typing import Any, Dict, List, Tuple
 
+from vibeweb.spec import validate_spec
 
 _SYSTEM_PROMPT = (
     "You generate VibeWeb app specs. "
@@ -101,20 +102,41 @@ def generate_spec(
     model = model or os.environ.get("VIBEWEB_AI_MODEL", "deepseek-chat")
     api_key = api_key or os.environ.get("VIBEWEB_AI_API_KEY")
 
-    messages = [
-        {"role": "system", "content": _SYSTEM_PROMPT},
-        {"role": "user", "content": prompt},
-    ]
+    max_repairs = int(os.environ.get("VIBEWEB_AI_REPAIR_TRIES", "2"))
+    last_error: Exception | None = None
+    for attempt in range(max_repairs + 1):
+        messages = [
+            {"role": "system", "content": _SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ]
+        if attempt and last_error is not None:
+            messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "Fix the JSON to satisfy the VibeWeb spec. "
+                        f"Validation error: {last_error}"
+                    ),
+                }
+            )
 
-    if provider == "openai":
-        text = _openai_chat(base_url, api_key, model, messages, temperature)
-    elif provider == "ollama":
-        text = _ollama_chat(base_url, model, messages, temperature)
-    else:
-        raise AIError("provider must be openai or ollama")
+        if provider == "openai":
+            text = _openai_chat(base_url, api_key, model, messages, temperature)
+        elif provider == "ollama":
+            text = _ollama_chat(base_url, model, messages, temperature)
+        else:
+            raise AIError("provider must be openai or ollama")
 
-    spec = _extract_json(text)
-    return normalize_spec(spec)
+        spec = _extract_json(text)
+        spec = normalize_spec(spec)
+        try:
+            validate_spec(spec)
+            return spec
+        except Exception as exc:  # noqa: BLE001
+            last_error = exc
+            continue
+
+    raise AIError(f"Spec validation failed after {max_repairs + 1} attempts: {last_error}")
 
 
 def normalize_spec(spec: Dict[str, Any]) -> Dict[str, Any]:

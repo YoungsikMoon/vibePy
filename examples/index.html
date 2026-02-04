@@ -140,11 +140,11 @@
           Endpoint: <span class="font-mono">POST /generate</span>
         </div>
       </div>
-      <form class="mt-6 grid gap-4 md:grid-cols-[1fr_auto]" method="post" action="/generate">
+      <form id="generate-form" class="mt-6 grid gap-4 md:grid-cols-[1fr_auto]" method="post" action="/generate">
         <textarea name="prompt" rows="4" class="w-full rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm shadow-[0_8px_16px_rgba(15,23,42,0.08)]" placeholder="예: CRM for freelancers with clients, projects, invoices"></textarea>
         <div class="flex flex-col gap-3">
-          <button class="rounded-2xl border border-slate-900/10 bg-brand-400 px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_18px_rgba(255,107,74,0.35)]" type="submit">Generate ZIP</button>
-          <p class="text-xs text-slate-600">Ensure `VIBEWEB_AI_API_KEY` is set.</p>
+          <button id="generate-btn" class="rounded-2xl border border-slate-900/10 bg-brand-400 px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_18px_rgba(255,107,74,0.35)]" type="submit">Generate ZIP</button>
+          <p id="generate-status" class="text-xs text-slate-600">Ensure `VIBEWEB_AI_API_KEY` is set.</p>
         </div>
       </form>
     </section>
@@ -272,6 +272,9 @@
     const qbFields = document.getElementById("qb-fields");
     const qbAddField = document.getElementById("qb-add-field");
     const qbGenerate = document.getElementById("qb-generate");
+    const generateForm = document.getElementById("generate-form");
+    const generateBtn = document.getElementById("generate-btn");
+    const generateStatus = document.getElementById("generate-status");
 
     function escapeHtml(value) {
       return String(value)
@@ -495,6 +498,41 @@
     qbFields.appendChild(createFieldRow("name", "text"));
 
     loadSample("todo");
+
+    generateForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(generateForm);
+      const prompt = String(formData.get("prompt") || "").trim();
+      if (!prompt) {
+        generateStatus.textContent = "Please enter a prompt.";
+        return;
+      }
+      generateBtn.disabled = true;
+      generateBtn.textContent = "Generating...";
+      generateStatus.textContent = "Creating ZIP with DeepSeek...";
+      try {
+        const res = await fetch("/generate", { method: "POST", body: formData });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text || "Generation failed");
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "vibeweb-app.zip";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        generateStatus.textContent = "ZIP generated.";
+      } catch (err) {
+        generateStatus.textContent = err.message || "Generation failed.";
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = "Generate ZIP";
+      }
+    });
   </script>
 </body>
 </html>
