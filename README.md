@@ -96,10 +96,10 @@ Examples homepage (served from root):
 python3 -m vibeweb gallery --root examples --host 127.0.0.1 --port 9000
 ```
 
-Natural language builder (GLM 4.8 local):
+Natural language builder (GLM-4.7-Flash local):
 ```bash
 export VIBEWEB_AI_BASE_URL="http://127.0.0.1:8080/v1"
-export VIBEWEB_AI_MODEL="glm-4.8"
+export VIBEWEB_AI_MODEL="glm-4.7-flash"
 python3 -m vibeweb gallery --root examples --host 127.0.0.1 --port 9000
 # Then open http://127.0.0.1:9000 and use the form to download a ZIP.
 ```
