@@ -18,6 +18,7 @@ VibePy is a JSON-first, AI-friendly stack that combines **VibeLang** (a Python-c
 - VibeWeb API
 - VibeWeb Limitations
 - VibeWeb Design Syntax
+- VibeWeb UI Customization
 - VibeWeb CLI
 - AI Generator (DeepSeek API)
 - Deploy (Render)
@@ -288,6 +289,20 @@ Core `THEME` keys
 - `grid`, `card`, `card_title`, `badge`, `link`, `link_muted`, `stack`
 
 Gallery design lives in `examples/index.html` (and `docs/index.html` for GitHub Pages).
+
+## VibeWeb UI Customization
+Two quick paths:
+1. Tailwind classes (fastest)
+   - Edit the classes in `docs/index.html` and `examples/index.html`.
+   - This controls layout, colors, spacing, and typography.
+
+2. External CSS (brand-grade)
+   - Add a `<link rel="stylesheet" href="...">` in the `<head>` of the UI pages.
+   - Keep the HTML structure intact and override only the CSS you need.
+
+Notes
+- The gallery UI is plain HTML + Tailwind CDN, so edits are immediate.
+- If you keep the DOM structure stable, the API layer stays untouched.
 
 ## VibeWeb CLI
 Quick start
