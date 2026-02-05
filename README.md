@@ -5,6 +5,9 @@
 ## Quickstart
 ```bash
 # 1) Run the gallery (Natural Language Builder + ZIP download)
+python3 -m venv ~/.venvs/vibepy
+source ~/.venvs/vibepy/bin/activate
+python3 -m pip install -U pip
 python3 -m pip install git+https://github.com/johunsang/vibePy
 python3 -m vibeweb gallery --root examples --host 127.0.0.1 --port 9000
 # open http://127.0.0.1:9000
