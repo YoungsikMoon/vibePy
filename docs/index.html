@@ -502,8 +502,9 @@
 
     generateForm.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const formData = new FormData(generateForm);
-      const prompt = String(formData.get("prompt") || "").trim();
+      const prompt = String(
+        generateForm.querySelector('[name="prompt"]')?.value || ""
+      ).trim();
       if (!prompt) {
         generateStatus.textContent = "프롬프트를 입력하세요.";
         return;
@@ -512,7 +513,11 @@
       generateBtn.textContent = "생성중...";
       generateStatus.textContent = "생성중...";
       try {
-        const res = await fetch("/generate", { method: "POST", body: formData });
+        const res = await fetch("/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
+        });
         if (!res.ok) {
           const text = await res.text();
           throw new Error(text || "Generation failed");

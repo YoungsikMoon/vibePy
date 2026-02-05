@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import cgi
 import io
 import json
 import os
@@ -126,6 +127,20 @@ class GalleryHandler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length > 0 else b""
         content_type = (self.headers.get("Content-Type") or "").split(";")[0]
+        if (self.headers.get("Content-Type") or "").startswith("multipart/form-data"):
+            environ = {
+                "REQUEST_METHOD": "POST",
+                "CONTENT_TYPE": self.headers.get("Content-Type") or "",
+                "CONTENT_LENGTH": str(length),
+            }
+            form = cgi.FieldStorage(
+                fp=io.BytesIO(raw),
+                headers=self.headers,
+                environ=environ,
+                keep_blank_values=True,
+            )
+            if form:
+                return {"prompt": str(form.getvalue("prompt") or "")}
         if content_type == "application/x-www-form-urlencoded":
             parsed = parse_qs(raw.decode("utf-8"))
             return {k: v[0] if v else "" for k, v in parsed.items()}
