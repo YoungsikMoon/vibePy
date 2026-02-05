@@ -3,20 +3,22 @@
 [Live Demo](https://vibepy-gallery.onrender.com)
 
 ## Quickstart
+Run the gallery (Natural Language Builder + ZIP download):
 ```bash
-# 1) Run the gallery (Natural Language Builder + ZIP download)
 python3 -m venv ~/.venvs/vibepy
 source ~/.venvs/vibepy/bin/activate
 python3 -m pip install -U pip
 python3 -m pip install git+https://github.com/johunsang/vibePy
 python3 -m vibeweb gallery --root examples --host 127.0.0.1 --port 9000
-# open http://127.0.0.1:9000
+```
+Then open `http://127.0.0.1:9000`.
 
-# 2) Run a generated ZIP (one command)
+Run a generated ZIP (one command):
+```bash
 cd "/path/to/your/downloaded-app"
 bash run.sh
-# open http://127.0.0.1:8000/admin
 ```
+Then open `http://127.0.0.1:8000/admin`.
 
 VibePy is a JSON-first, AI-friendly stack that combines **VibeLang** (a Python-compatible DSL) and **VibeWeb** (a full‑stack JSON spec for DB/API/UI). It runs on CPython and keeps the full Python ecosystem available.
 
