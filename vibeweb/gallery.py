@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import cgi
 import io
 import json
 import os
@@ -127,20 +126,11 @@ class GalleryHandler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length > 0 else b""
         content_type = (self.headers.get("Content-Type") or "").split(";")[0]
-        if (self.headers.get("Content-Type") or "").startswith("multipart/form-data"):
-            environ = {
-                "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": self.headers.get("Content-Type") or "",
-                "CONTENT_LENGTH": str(length),
-            }
-            form = cgi.FieldStorage(
-                fp=io.BytesIO(raw),
-                headers=self.headers,
-                environ=environ,
-                keep_blank_values=True,
-            )
-            if form:
-                return {"prompt": str(form.getvalue("prompt") or "")}
+        full_content_type = self.headers.get("Content-Type") or ""
+        if full_content_type.startswith("multipart/form-data"):
+            parsed = self._parse_multipart(raw, full_content_type)
+            if parsed:
+                return parsed
         if content_type == "application/x-www-form-urlencoded":
             parsed = parse_qs(raw.decode("utf-8"))
             return {k: v[0] if v else "" for k, v in parsed.items()}
@@ -151,6 +141,26 @@ class GalleryHandler(BaseHTTPRequestHandler):
             if isinstance(data, dict):
                 return {k: str(v) for k, v in data.items()}
         return {}
+
+    def _parse_multipart(self, raw: bytes, content_type: str) -> dict[str, str]:
+        if not raw:
+            return {}
+        # Parse multipart without deprecated cgi module (removed in Python 3.13).
+        msg = BytesParser(policy=email_default_policy).parsebytes(
+            b"Content-Type: " + content_type.encode("utf-8") + b"\r\n\r\n" + raw
+        )
+        if not msg.is_multipart():
+            return {}
+        result: dict[str, str] = {}
+        for part in msg.iter_parts():
+            if part.get_content_disposition() != "form-data":
+                continue
+            name = part.get_param("name", header="content-disposition")
+            if not name:
+                continue
+            value = part.get_content()
+            result[str(name)] = str(value)
+        return result
 
     def _apply_security_headers(self, *, is_html: bool = False) -> None:
         self.send_header("X-Content-Type-Options", "nosniff")
@@ -211,3 +221,5 @@ def _build_zip(spec: dict) -> tuple[bytes, str]:
 def _slugify(value: str) -> str:
     cleaned = re.sub(r"[^a-zA-Z0-9]+", "-", value.strip()).strip("-").lower()
     return cleaned or "vibeweb_app"
+from email.parser import BytesParser
+from email.policy import default as email_default_policy
